@@ -58,14 +58,26 @@ public class BookController {
     }
 
     @PostMapping("/updateBookById/{id}")
-    public void updateBookById(@PathVariable Long id){
-        Optional<Book> book = bookRepo.findById(id);
+    public ResponseEntity<Book> updateBookById(@PathVariable Long id, @RequestBody Book newBook){
+        Optional<Book> oldBook = bookRepo.findById(id);
 
+        if(oldBook.isPresent()){
+            Book updatedBook = oldBook.get();
+            updatedBook.setTitle(newBook.getTitle());
+            updatedBook.setAuthor(newBook.getAuthor());
+
+            bookRepo.save(updatedBook);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping
-    public void deleteBookById(){
+    @DeleteMapping("/deleteBook/{id}")
+    public ResponseEntity<HttpStatus> deleteBookById(@PathVariable Long id){
+        bookRepo.deleteById(id);
 
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
