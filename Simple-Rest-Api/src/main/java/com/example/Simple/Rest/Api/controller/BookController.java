@@ -67,7 +67,7 @@ public class BookController {
             updatedBook.setAuthor(newBook.getAuthor());
 
             bookRepo.save(updatedBook);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(updatedBook,HttpStatus.OK);
 
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
